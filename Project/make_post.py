@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 from config import *
 from MySQLdb import connect
 from MySQLdb.cursors import DictCursor
