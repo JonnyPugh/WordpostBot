@@ -7,6 +7,7 @@ from math import ceil
 from sets import Set
 import requests
 import time
+import os
 
 def connect_to_database():
     options = {
@@ -44,6 +45,9 @@ def get_wordnik_json(route, extra_params):
 def write_to_log(log_file, message):
 	log_file.write("["+time.ctime()+"]:\t"+message+"\n")
 
+# Change working directory to the directory of this script so log files
+# are created in this directory no matter where the script is run
+os.chdir(os.path.dirname(os.path.abspath(__file__)))
 error_log = open("error.log", "a+")
 
 def main():
