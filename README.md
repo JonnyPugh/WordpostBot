@@ -4,7 +4,7 @@
   Make posts to a Facebook page containing a word and the definition of that word
 
 ### Setup:
-  These instructions are written for a linux environment because that is the environment in which it was developed and is used.
+  These instructions are written for a linux environment because that is the environment in which it was developed and is used. It is assumed that Python 2, virtualenv, and MySQL are already installed.
   After pulling this repository, set up a virtualenv environment for this project and install the packages that are specified in requirements.txt in that environment.
   Next, create the database in MySQL that you want to use to store the Posts and then run tbl_create.sql on this database to create the Posts table within that database. 
   Then, create a file in the Project directory called config.py with definitions of some data. Here is an example config file (the names of the variables and key mappings inside the dictionaries must match these to work with the make_post.py script):
@@ -32,6 +32,11 @@ db_info = {
 ```
 python make_post.py
 ```
+
+### Usage
+  The make_post.py script is meant to be automated to in time intervals. For example, WordpostBot runs this script every 30 minutes.
+  The error log for the script will be created at Project/error.log and will document any errors.
+  A log file for posts will be created at Project/posts.log and will document posts that are successfully completed.
 
 ### Facebook Page:
   https://www.facebook.com/WordpostBot
