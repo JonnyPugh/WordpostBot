@@ -44,14 +44,15 @@ def get_wordnik_json(route, extra_params):
 	return request_json
 
 def post_word(route, word):
-	definition = get_wordnik_json("word.json/"+word+"/definitions", {})[0]
+	word_info = get_wordnik_json("word.json/"+word+"/definitions", {})[0]
+	definition = word_info["text"]
 	data = {
-		"message": word+(" - "+definition["partOfSpeech"] if "partOfSpeech" in definition else "")+"\n"+definition["text"],
+		"message": word+(" - "+word_info["partOfSpeech"] if "partOfSpeech" in word_info else "")+"\n"+definition,
 		"access_token": page_info["access_token"]
 	}
 	r = requests.post("https://graph.facebook.com/v2.8/"+route, data=data)
 	r.raise_for_status()
-	return r.json()["id"], definition["text"]
+	return r.json()["id"], definition
 
 def write_to_log(log_file, message):
 	log_file.write("["+time.ctime()+"]:\t"+message+"\n")
@@ -81,8 +82,8 @@ def main():
 
 		# If the posted word references a root word, post the 
 		# definition of the root word as a comment
-		for regex in [".*? form of (.*?)[.]", ".*? participle of (.*?)[.]", "See (.*?)[.]"]:
-			reference_word = match(regex, definition)
+		for pattern in [".*? form of", ".*? participle of", "See", "Variant of", ".*?[.] See Synonyms at", "Alternative spelling of", "Relating to", "An abbreviation of", "Common misspelling of"]:
+			reference_word = match(pattern+" ([^ ]*?)[.]", definition)
 			if reference_word:
 				root_word = reference_word.group(1)
 				post_word(post_id+"/comments", root_word)
