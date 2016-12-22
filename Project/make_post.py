@@ -85,7 +85,7 @@ def main():
 	if plural_word:
 		root_word = plural_word.group(1)
 		post_word(post_id+"/comments", root_word)
-		write_to_log(posts_log, "Posted comment definition of word '"+root_word+"' on post with definition of '"+word"'")
+		write_to_log(posts_log, "Posted comment definition of word '"+root_word+"' on post with definition of '"+word+"'")
 
 if __name__ == "__main__":
 	try:
