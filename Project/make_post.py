@@ -75,17 +75,18 @@ def main():
 
 	# Make a post, insert its data into the database, and log it
 	post_id, definition = post_word(page_info["page_id"]+"/feed", word)
-	execute_query("insert into Posts values (%s, %s, %s)", (int(ceil(time.time())), post_id, word))
+	#execute_query("insert into Posts values (%s, %s, %s)", (int(ceil(time.time())), post_id, word))
 	with open("posts.log", "a+") as posts_log:
 		write_to_log(posts_log, "Finished posting word - "+word)
 
-		# If the posted word was plural, post the 
+		# If the posted word references a root word, post the 
 		# definition of the root word as a comment
-		plural_word = match("Plural form of (.*?)[.]", definition)
-		if plural_word:
-			root_word = plural_word.group(1)
-			post_word(post_id+"/comments", root_word)
-			write_to_log(posts_log, "Posted comment definition of word '"+root_word+"' on post with definition of '"+word+"'")
+		for regex in [".*? form of (.*?)[.]", ".*? participle of (.*?)[.]", "See (.*?)[.]"]:
+			reference_word = match(regex, definition)
+			if reference_word:
+				root_word = reference_word.group(1)
+				post_word(post_id+"/comments", root_word)
+				write_to_log(posts_log, "Posted comment definition of word '"+root_word+"' on post with definition of '"+word+"'")
 
 if __name__ == "__main__":
 	try:
