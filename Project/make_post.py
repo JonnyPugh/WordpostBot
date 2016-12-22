@@ -75,7 +75,7 @@ def main():
 
 	# Make a post, insert its data into the database, and log it
 	post_id, definition = post_word(page_info["page_id"]+"/feed", word)
-	#execute_query("insert into Posts values (%s, %s, %s)", (int(ceil(time.time())), post_id, word))
+	execute_query("insert into Posts values (%s, %s, %s)", (int(ceil(time.time())), post_id, word))
 	with open("posts.log", "a+") as posts_log:
 		write_to_log(posts_log, "Finished posting word - "+word)
 
