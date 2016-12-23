@@ -56,7 +56,7 @@ def post_word(route, word):
 	return r.json()["id"], definition
 
 def post_root_word(post_id, word, definition):
-	for pattern in [".*? form of", ".*? participle of", "See", "Variant of", ".*?[.] See Synonyms at", "Alternative spelling of", "Relating to", "An abbreviation of", "Common misspelling of", "Of or pertaining to"]:
+	for pattern in [".*? form of", ".*? participle of", "See", "Variant of", ".*?[.] See Synonyms at", "Alternative spelling of", "Relating to", "An abbreviation of", "Common misspelling of", "Of or pertaining to", "Superlative of"]:
 		reference_word = match(pattern+" ([^ ]*?)[.]", definition)
 		if reference_word:
 			root_word = reference_word.group(1)
