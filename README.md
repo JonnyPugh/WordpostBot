@@ -12,7 +12,7 @@ $ virtualenv venv
 $ source venv/bin/activate
 $ pip install -r requirements.txt
 ```
-  Next, create the database that you want to use to store the Posts in MySQL and then run tbl_create.sql on this database to create the Posts table within that database:
+  Next, create the database that you want to use in MySQL and then run tbl_create.sql on this database to create the Posts table within that database:
 ```bash
 $ # After creating the database (WordpostBot uses a UTF-8 database)
 $ mysql <database> -u <username> -p < tbl_create.sql
