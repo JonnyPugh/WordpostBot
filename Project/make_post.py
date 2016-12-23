@@ -3,7 +3,6 @@
 from config import *
 from MySQLdb import connect
 from MySQLdb.cursors import DictCursor
-from math import ceil
 from sets import Set
 from re import match
 from time import ctime
