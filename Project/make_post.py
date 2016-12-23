@@ -6,8 +6,8 @@ from MySQLdb.cursors import DictCursor
 from math import ceil
 from sets import Set
 from re import match
+from time import ctime
 import requests
-import time
 import os
 import codecs
 
@@ -65,7 +65,7 @@ def post_root_word(post_id, word, definition):
 			post_root_word(post_id, root_word, new_definition)
 
 def write_to_log(log_file, message):
-	log_file.write("["+time.ctime()+"]:\t"+message+"\n")
+	log_file.write("["+ctime()+"]:\t"+message+"\n")
 
 # Change working directory to the directory of this script so log files
 # are created in this directory no matter where the script is run
@@ -84,7 +84,7 @@ def main():
 
 	# Make a post, insert its data into the database, and log it
 	post_id, definition = post_word(page_info["page_id"]+"/feed", word)
-	execute_query("insert into Posts values (%s, %s, %s)", (int(ceil(time.time())), post_id, word))
+	execute_query("insert into Posts (id, word) values (%s, %s)", (post_id, word))
 	write_to_log(posts_log, "Finished posting word - "+word)
 
 	# If the posted word references a root word, post the 
