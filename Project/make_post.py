@@ -9,6 +9,7 @@ from re import match
 import requests
 import time
 import os
+import codecs
 
 def connect_to_database():
     options = {
@@ -54,19 +55,27 @@ def post_word(route, word):
 	r.raise_for_status()
 	return r.json()["id"], definition
 
+def post_root_word(post_id, word, definition):
+	for pattern in [".*? form of", ".*? participle of", "See", "Variant of", ".*?[.] See Synonyms at", "Alternative spelling of", "Relating to", "An abbreviation of", "Common misspelling of", "Of or pertaining to"]:
+		reference_word = match(pattern+" ([^ ]*?)[.]", definition)
+		if reference_word:
+			root_word = reference_word.group(1)
+			post_id, new_definition = post_word(post_id+"/comments", root_word)
+			write_to_log(posts_log, "Posted comment definition of word '"+root_word+"' on post with definition of '"+word+"'")
+			post_root_word(post_id, root_word, new_definition)
+
 def write_to_log(log_file, message):
 	log_file.write("["+time.ctime()+"]:\t"+message+"\n")
 
 # Change working directory to the directory of this script so log files
 # are created in this directory no matter where the script is run
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
-error_log = open("error.log", "a+")
+error_log = codecs.open("error.log", "a+", "utf-8")
+posts_log = codecs.open("posts.log", "a+", "utf-8")
 
 def main():
-	# Form a set of all posted words to prevent reposts
+	# Get a random word that has not been posted yet
 	posted_words = Set([post["word"] for post in execute_query("select word from Posts")])
-
-	# Get word to post
 	while True:
 		word = get_wordnik_json("words.json/randomWords", {"minLength": 0})[0]["word"]
 		if word in posted_words:
@@ -77,17 +86,11 @@ def main():
 	# Make a post, insert its data into the database, and log it
 	post_id, definition = post_word(page_info["page_id"]+"/feed", word)
 	execute_query("insert into Posts values (%s, %s, %s)", (int(ceil(time.time())), post_id, word))
-	with open("posts.log", "a+") as posts_log:
-		write_to_log(posts_log, "Finished posting word - "+word)
+	write_to_log(posts_log, "Finished posting word - "+word)
 
-		# If the posted word references a root word, post the 
-		# definition of the root word as a comment
-		for pattern in [".*? form of", ".*? participle of", "See", "Variant of", ".*?[.] See Synonyms at", "Alternative spelling of", "Relating to", "An abbreviation of", "Common misspelling of"]:
-			reference_word = match(pattern+" ([^ ]*?)[.]", definition)
-			if reference_word:
-				root_word = reference_word.group(1)
-				post_word(post_id+"/comments", root_word)
-				write_to_log(posts_log, "Posted comment definition of word '"+root_word+"' on post with definition of '"+word+"'")
+	# If the posted word references a root word, post the 
+	# definition of the root word as a comment
+	post_root_word(post_id, word, definition)
 
 if __name__ == "__main__":
 	try:
