@@ -17,7 +17,7 @@ $ pip install -r requirements.txt
 $ # After creating the database (WordpostBot uses a UTF-8 database)
 $ mysql <database> -u <username> -p < tbl_create.sql
 ``` 
-  Then, create a file in the Project/ directory called config.py with definitions of some data. Here is an example config file to fill out (**the names of the variables and keys in the dictionaries must match these to work with the make_post.py script**):
+  Then, create a file in the Project directory called config.py with definitions of some data. Here is an example config file to fill out (**the names of the variables and keys in the dictionaries must match these to work with the make_post.py script**):
 ```python
 # Do NOT commit this file to github
 # This file contains your wordnik api key, the private 
