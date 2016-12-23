@@ -78,10 +78,9 @@ def main():
 	posted_words = Set([post["word"] for post in execute_query("select word from Posts")])
 	while True:
 		word = get_wordnik_json("words.json/randomWords", {"minLength": 0})[0]["word"]
-		if word in posted_words:
-			write_to_log(error_log, "Word: '"+word+"' already posted, posting another...")
-			continue
-		break
+		if word not in posted_words:
+			break
+		write_to_log(error_log, "Word: '"+word+"' already posted, posting another...")
 
 	# Make a post, insert its data into the database, and log it
 	post_id, definition = post_word(page_info["page_id"]+"/feed", word)
