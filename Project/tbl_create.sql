@@ -4,4 +4,4 @@ Tables (formatted "<table name>: <field1>, <field2>, etc."):
 Posts: time, id, word
 */
 
-create table Posts (time int not null, id varchar(31), word varchar(64), primary key(id));
+create table Posts (time int not null primary key, id varchar(31) not null, word varchar(64) not null, constraint unique_id unique (id));
