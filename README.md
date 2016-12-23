@@ -1,4 +1,4 @@
-# WordpostBot: Facebook post bot
+# [WordpostBot](https://www.facebook.com/WordpostBot): Facebook post bot
 
 ## Functionality:
   Make posts to a Facebook page containing a word and the definition of that word.
@@ -48,5 +48,3 @@ $ python make_post.py
   
   The error log for the script will be created at Project/error.log and will document any errors.
   A log file for posts will be created at Project/posts.log and will document posts that are successfully completed and comments that are added on those posts by the bot.
-
-## [Facebook Page](https://www.facebook.com/WordpostBot)
