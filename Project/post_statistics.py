@@ -33,12 +33,12 @@ def main():
 	for user_id, user_info in users.items():
 		reactions_breakdown = ", ".join(["%s %s" % (value, key) for (key, value) in sorted(user_info.items(), key=itemgetter(1), reverse=True)])+" reactions"
 		total_reactions = sum([value for value in user_info.values()])
-		users_info.append((total_reactions, user_names[user_id]+" "+str(total_reactions)+": "+reactions_breakdown))
+		users_info.append((total_reactions, user_names[user_id]+" - "+str(total_reactions)+": "+reactions_breakdown))
 		overall_total_reactions += total_reactions
 
 	# Form the message to post to the page
 	number_of_reactors = 10
-	message = "***Top "+str(number_of_reactors)+" reactors***\nFormat: '<rank>. <name> <total reactions>: <individual reactions>'\n"
+	message = "***Top "+str(number_of_reactors)+" Reactors***\n"
 	ranking = 1
 	for reactions_info in sorted(users_info, key=lambda x: x[0], reverse=True)[:number_of_reactors]:
 		message += str(ranking)+". "+reactions_info[1]+"\n"
