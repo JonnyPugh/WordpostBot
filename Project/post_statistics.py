@@ -38,7 +38,7 @@ def main():
 
 	# Form the message to post to the page
 	number_of_reactors = 10
-	message = "Top "+str(number_of_reactors)+" reactors\nThe format is <rank>. <name> <total reactions>: <individual reaction numbers>\n"
+	message = "***Top "+str(number_of_reactors)+" reactors***\nThe format is <rank>. <name> <total reactions>: <individual reaction numbers>\n"
 	ranking = 1
 	for reactions_info in sorted(users_info, key=lambda x: x[0], reverse=True)[:number_of_reactors]:
 		message += str(ranking)+". "+reactions_info[1]+"\n"
