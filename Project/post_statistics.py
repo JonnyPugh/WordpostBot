@@ -37,9 +37,10 @@ def main():
 		overall_total_reactions += total_reactions
 
 	# Form the message to post to the page
-	message = ""
+	number_of_reactors = 10
+	message = "Top "+str(number_of_reactors)+" reactors\nThe format is <rank>. <name> <total reactions>: <individual reaction numbers>\n"
 	ranking = 1
-	for reactions_info in sorted(users_info, key=lambda x: x[0], reverse=True)[:10]:
+	for reactions_info in sorted(users_info, key=lambda x: x[0], reverse=True)[:number_of_reactors]:
 		message += str(ranking)+". "+reactions_info[1]+"\n"
 		ranking += 1
 	message += "Average reactions per post: "+str(float(overall_total_reactions) / len(post_ids))
