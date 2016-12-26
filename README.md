@@ -6,7 +6,7 @@
 ## Setup:
   These instructions are written for a linux environment because that is the environment in which WordpostBot was developed and is used. It is assumed that Python 2, virtualenv, pip, and MySQL are already installed.
 
-  After pulling this repository, set up a virtualenv environment for this project and install the packages that are specified in requirements.txt in that environment:
+  After cloning this repository, set up a virtualenv environment for this project and install the packages that are specified in requirements.txt in that environment:
 ```bash
 $ virtualenv venv
 $ source venv/bin/activate
@@ -37,13 +37,14 @@ db_info = {
 	"db": "<Database name>",
 }
 ```
-  Once the database is created, the Posts table is created in that database, and the config.py file is populated with correct info, you can make a post to the specified Facebook page by running make_post.py:
+  Once the database is created, the Posts table is created in that database, and the config.py file is populated with correct info, you can post a word to the specified Facebook page by running make_post.py or post some statistics by running post\_statistics.py:
 ```bash
 $ python make_post.py
+$ python post_statistics.py
 ```
 
 ## Usage
-  The make_post.py script is meant to be automated to run in time intervals. For example, WordpostBot runs this script every 30 minutes.
+  The make_post.py and post_statistics.py scripts are meant to be automated to run in time intervals. For example, WordpostBot runs make_post.py every 30 minutes and post_statistics.py weekly.
   
-  The error log for the script will be created at Project/error.log and will document any errors.
+  The error log for the scripts will be created at Project/error.log and will document any errors.
   A log file for posts will be created at Project/posts.log and will document posts that are successfully completed and comments that are added on those posts by the bot.
