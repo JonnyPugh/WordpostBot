@@ -22,8 +22,8 @@ def post_word(route, word):
 	return post_to_page(route, word+(" - "+word_info["partOfSpeech"] if "partOfSpeech" in word_info else "")+"\n"+definition), definition
 
 def post_root_word(post_id, word, definition):
-	for pattern in [s + " ([^ ]*?)[.]" for s in [".*? form of", ".*? participle of", "See", "Variant of", ".*?[.] See Synonyms at", "Alternative spelling of", "Relating to", "An abbreviation of", "Common misspelling of", "Of or pertaining to", "Superlative of", "Obsolete spelling of"]] + ["([^ ]*?)", "Alternative capitalization of ([^ ]*?)", "In a ([^ ]*?) manner."]:
-		reference_word = match(pattern, definition)
+	for pattern in [s + " ([^ ]*?)[.]" for s in [".*? form of", ".*? participle of", "See", "Variant of", ".*?[.] See Synonyms at", "Alternative spelling of", "Relating to", "An abbreviation of", "Common misspelling of", "Of or pertaining to", "Superlative of", "Obsolete spelling of", "Informal"]] + ["([^ ]*?)", "Alternative capitalization of ([^ ]*?)", "In a ([^ ]*?) manner."]:
+		reference_word = match("^"+pattern+"$", definition)
 		if reference_word:
 			root_word = reference_word.group(1)
 			post_id, new_definition = post_word(post_id+"/comments", root_word)
