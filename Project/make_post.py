@@ -22,14 +22,29 @@ def post_word(route, word):
 	return post_to_page(route, word+(" - "+word_info["partOfSpeech"] if "partOfSpeech" in word_info else "")+"\n"+definition), definition
 
 def post_root_word(post_id, word, definition):
-	for pattern in [s + " ([^ ]*?)[.]" for s in [".*? form of", ".*? participle of", "See", "Variant of", ".*?[.] See Synonyms at", "Alternative spelling of", "Relating to", "An abbreviation of", "Common misspelling of", "Of or pertaining to", "Superlative of", "Obsolete spelling of", "Informal", "To", "The act or process of", "One who believes in"]] + ["([^ ]*?)", "Alternative capitalization of ([^ ]*?)", "In a ([^ ]*?) manner."]:
+	# If the definition matches any of these patterns, post
+	# the word that is referenced in the definition
+	for pattern in [s + " ([^ ]*)[.]" for s in [".* form of", ".* participle of", "See", "Variant of", ".*[.] See Synonyms at", "Alternative spelling of", "Relating to", "An abbreviation of", "Common misspelling of", "Of or pertaining to", "Superlative of", "Obsolete spelling of", "Informal", "To", "The act or process of", "One who believes in"]] + ["([^ .]*)[.]?", "Alternative capitalization of ([^ ]*)", "In a ([^ ]*) manner."]:
 		reference_word = match("^"+pattern+"$", definition)
 		if reference_word:
 			root_word = reference_word.group(1)
+
+			# If the definition is a single word, make it lowercase because
+			# the wordnik API is case sensitive and single word definitions
+			# may have been capitalized
+			if pattern is "([^ .]*)[.]?":
+				root_word = root_word.lower()
+
+			# Post the root word and write to the log
 			post_id, new_definition = post_word(post_id+"/comments", root_word)
 			write_to_log(posts_log, "Posted comment definition of word '"+root_word+"' on post with definition of '"+word+"'")
+
+			# Save off the id of the first posted comment because all subsequent
+			# comments should be replies to this initial comment
 			if not post_root_word.comment_id:
 				post_root_word.comment_id = post_id
+
+			# Check the root word's definition for other referenced words
 			post_root_word(post_root_word.comment_id, root_word, new_definition)
 post_root_word.comment_id = None
 
