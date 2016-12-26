@@ -41,7 +41,6 @@ def main():
 		if word not in posted_words:
 			break
 		write_to_log(error_log, "Word: '"+word+"' already posted, posting another...")
-	word = "legitimises"
 
 	# Make a post, insert its data into the database, and log it
 	post_id, definition = post_word(page_info["page_id"]+"/feed", word)
