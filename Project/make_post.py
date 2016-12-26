@@ -22,13 +22,16 @@ def post_word(route, word):
 	return post_to_page(route, word+(" - "+word_info["partOfSpeech"] if "partOfSpeech" in word_info else "")+"\n"+definition), definition
 
 def post_root_word(post_id, word, definition):
-	for pattern in [s + " ([^ ]*?)[.]" for s in [".*? form of", ".*? participle of", "See", "Variant of", ".*?[.] See Synonyms at", "Alternative spelling of", "Relating to", "An abbreviation of", "Common misspelling of", "Of or pertaining to", "Superlative of", "Obsolete spelling of", "Informal"]] + ["([^ ]*?)", "Alternative capitalization of ([^ ]*?)", "In a ([^ ]*?) manner."]:
+	for pattern in [s + " ([^ ]*?)[.]" for s in [".*? form of", ".*? participle of", "See", "Variant of", ".*?[.] See Synonyms at", "Alternative spelling of", "Relating to", "An abbreviation of", "Common misspelling of", "Of or pertaining to", "Superlative of", "Obsolete spelling of", "Informal", "To"]] + ["([^ ]*?)", "Alternative capitalization of ([^ ]*?)", "In a ([^ ]*?) manner."]:
 		reference_word = match("^"+pattern+"$", definition)
 		if reference_word:
 			root_word = reference_word.group(1)
 			post_id, new_definition = post_word(post_id+"/comments", root_word)
 			write_to_log(posts_log, "Posted comment definition of word '"+root_word+"' on post with definition of '"+word+"'")
-			post_root_word(post_id, root_word, new_definition)
+			if not post_root_word.comment_id:
+				post_root_word.comment_id = post_id
+			post_root_word(post_root_word.comment_id, root_word, new_definition)
+post_root_word.comment_id = None
 
 def main():
 	# Get a random word that has not been posted yet
@@ -38,6 +41,7 @@ def main():
 		if word not in posted_words:
 			break
 		write_to_log(error_log, "Word: '"+word+"' already posted, posting another...")
+	word = "legitimises"
 
 	# Make a post, insert its data into the database, and log it
 	post_id, definition = post_word(page_info["page_id"]+"/feed", word)
