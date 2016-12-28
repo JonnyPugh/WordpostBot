@@ -32,7 +32,7 @@ def post_root_word(post_id, word, definition):
 			# If the definition is a single word, make it lowercase because
 			# the wordnik API is case sensitive and single word definitions
 			# may have been capitalized
-			if pattern is "([^ .]*)[.]?":
+			if pattern == "([^ .]*)[.]?":
 				root_word = root_word.lower()
 
 			# Post the root word and write to the log
