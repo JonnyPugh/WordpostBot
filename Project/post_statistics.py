@@ -2,7 +2,6 @@
 
 from extensions import *
 from config import page_info
-from operator import itemgetter
 
 def main():
 	# Form list of IDs of all posts made to the page
@@ -19,7 +18,7 @@ def main():
 				user_names[user_id] = reaction["name"]
 				if user_id not in users:
 					users[user_id] = {}
-				reaction_type = reaction["type"].lower()
+				reaction_type = reaction["type"]
 				if reaction_type not in users[user_id]:
 					users[user_id][reaction_type] = 0
 				users[user_id][reaction_type] += 1
@@ -28,12 +27,20 @@ def main():
 			json = get_request_json(json["paging"]["next"])
 
 	# Form the reaction info strings for all users
+	emoticons = {
+	    "LIKE": "\xF0\x9F\x91\x8D",
+	    "LOVE": "\xF0\x9F\x92\x9F",
+	    "HAHA": "\xF0\x9F\x98\x86",
+	    "WOW": "\xF0\x9F\x98\xAE",
+	    "SAD": "\xF0\x9F\x98\xA2",
+	    "ANGRY": "\xF0\x9F\x98\xA1"
+	}
 	overall_total_reactions = 0
 	users_info = []
 	for user_id, user_info in users.items():
-		reactions_breakdown = ", ".join(["%s %s" % (value, key) for (key, value) in sorted(user_info.items(), key=itemgetter(1), reverse=True)])+" reactions"
-		total_reactions = sum([value for value in user_info.values()])
-		users_info.append((total_reactions, user_names[user_id]+" - "+str(total_reactions)+": "+reactions_breakdown))
+		reactions_breakdown = " ".join([" ".join([emoticons[reaction_type], str(num)]) for (reaction_type, num) in sorted(user_info.items(), key=lambda x: x[1], reverse=True)])
+		total_reactions = sum(user_info.values())
+		users_info.append((total_reactions, user_names[user_id]+" - "+str(total_reactions)+": "+reactions_breakdown.decode("utf-8")))
 		overall_total_reactions += total_reactions
 
 	# Form the message to post to the page
