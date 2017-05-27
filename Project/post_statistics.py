@@ -34,7 +34,7 @@ def main():
 	    "WOW": "\xF0\x9F\x98\xAE",
 	    "SAD": "\xF0\x9F\x98\xA2",
 	    "ANGRY": "\xF0\x9F\x98\xA1",
-	    "THANKFUL": u"\U0001F338"
+	    "THANKFUL": "\xF0\x9F\x8C\xB8"
 	}
 	overall_total_reactions = 0
 	users_info = []
