@@ -33,7 +33,7 @@ def main():
 	    "HAHA": "\xF0\x9F\x98\x86",
 	    "WOW": "\xF0\x9F\x98\xAE",
 	    "SAD": "\xF0\x9F\x98\xA2",
-	    "ANGRY": "\xF0\x9F\x98\xA1"
+	    "ANGRY": "\xF0\x9F\x98\xA1",
 	    "THANKFUL": u"\U0001F338"
 	}
 	overall_total_reactions = 0
